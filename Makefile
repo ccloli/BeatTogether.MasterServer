@@ -32,6 +32,11 @@ else
     ifneq ($(filter %86,$(UNAME_M)),)
 		RELEASE_ARCH += x86
     endif
+
+    ifeq ($(UNAME_M),arm)
+	RELEASE_ARCH := arm
+    endif
+
 endif
 
 RID := $(RELEASE_OS)-$(RELEASE_ARCH)
