@@ -6,7 +6,16 @@ COPY . ./
 RUN dotnet restore
 
 # Build the project
-RUN dotnet publish BeatTogether.MasterServer -c Release -p:PublishReadyToRun=true -r linux-arm -o out
+RUN ARCH= && \
+    case "$(dpkg --print-architecture)" in \
+        amd64) ARCH='x64';; \
+        i386) ARCH='x86';; \
+        arm64) ARCH='arm64';; \
+        armhf) ARCH='arm';; \
+        armel) ARCH='arm';; \
+        *) echo "unsupported architecture"; exit 1 ;; \
+    esac && \
+    dotnet publish BeatTogether.MasterServer -c Release -p:PublishReadyToRun=true -r "linux-$ARCH" -o out
 
 # Run the application
 FROM mcr.microsoft.com/dotnet/runtime:5.0
