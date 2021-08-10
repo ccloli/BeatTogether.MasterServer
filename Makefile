@@ -33,8 +33,12 @@ else
 		RELEASE_ARCH += x86
     endif
 
-    ifeq ($(UNAME_M),arm)
-	RELEASE_ARCH := arm
+    ifneq (,$(findstring arm,$(UNAME_M)))
+        ifeq ($(UNAME_M),arm64)
+            RELEASE_ARCH = arm64
+        else
+            RELEASE_ARCH = arm
+        endif
     endif
 
 endif
